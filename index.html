@@ -1,0 +1,77 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+    <title>Camera</title> 
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <link rel="stylesheet" href="jquery.mobile-1.4.3.min.css" />
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="jquery.mobile-1.4.3.min.js"></script>
+
+
+    <script type="text/javascript" charset="utf-8">
+
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value
+
+    document.addEventListener("deviceready",onDeviceReady,false);
+
+    function onDeviceReady() {//atribuição de valores a variáveis
+        pictureSource=navigator.camera.PictureSourceType; 
+        destinationType=navigator.camera.DestinationType;// navigator. plugin. local
+    }
+
+    function onPhotoDataSuccess(imageData) { //callback de sucesso
+      var smallImage = document.getElementById('smallImage');
+      smallImage.style.display = 'block';
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+    }
+
+    function onPhotoURISuccess(imageURI) { // callback
+      var LargeImage = document.getElementById('smallImage');
+      LargeImage.style.display = 'block';
+      LargeImage.src = imageURI;
+    }
+
+    function capturePhoto() { // pegar a foto, usa o plugin
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
+        destinationType: destinationType.DATA_URL });
+    }
+
+    function capturePhotoEdit() { // pegar a foto, usa o plugin
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit:true,
+        destinationType: destinationType.DATA_URL });
+    }
+    
+    function getPhoto(source) { // pega a foto capturada
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+        destinationType: destinationType.FILE_URI,
+        sourceType: source });
+    }
+
+    function onFail(message) {// mens de erro
+      alert('Failed because: ' + message);
+    }
+
+    </script>
+
+</head> 
+
+  <body>
+    <div data-role="page" id="camera" data-theme="b">
+       <header data-role="header" data-position="fixed"><!--Para o framework entender que é um cabeçalho com posição fixa, não some com a barra de rolagem-->
+       
+<h1>Camera_Plugin-TCC_Erlan</h1>
+
+    <div style="text-align:center"><a href=""  onclick="capturePhoto();"><img src="cam.jpg"  height: "50px"
+    width: "50px" /></a></div>       
+    <div style="text-align:center"><a href="" onclick="getPhoto(pictureSource.PHOTOLIBRARY);"><img src="galeria.png" width="80px" height="60px"/></a></div>
+    </header>
+     <div style="text-align:center">
+      <img style="display:none;width:240px;height:240px;" id="smallImage" src="" />
+    </div>
+    </div>
+
+
+
+</body>
+</html>
